@@ -1,109 +1,111 @@
-const log = value => console.log(value)
 const addToCartBtnText = 'Add to cart'
 const minusSymbol = '-'
 const plusSymbol = '+'
 let quantity = 1
 
-// A user can view a selection of items in the store 					[X]
-// From the store, a user can add an item to their cart				[X]
+// A user can view a selection of items in the store 		[X]
+// From the store, a user can add an item to their cart		[X]
 
 let itemList = document.querySelector('.store--item-list')
-const cart = document.querySelector('.cart--item-list')
+const cart = document.querySelector('#cart-ul')
 let totalPrice = document.querySelector('.total-number')
 
 
-function renderItemsList() {
+function renderShop() {
 	clearStore()
-	for (const element of state.items) {
-		const item = document.createElement('li')
-		const itemContainer = document.createElement('div')
-		const itemImage = document.createElement('img')
+	renderItemsList()
+	renderCart()
+}
+
+function renderItemsList() {
+	for (const item of state.items) {
+		const liEl = document.createElement('li')
+		const divEl = document.createElement('div')
+		const imgEl = document.createElement('img')
 		const addToCartBtn = document.createElement('button')
-		itemContainer.setAttribute('class', 'store--item-icon')
-		itemImage.setAttribute('src', `assets/icons/${element.id}.svg`)
-		itemImage.setAttribute('alt', `${element.name}`)
+		divEl.setAttribute('class', 'store--item-icon')
+		imgEl.setAttribute('src', `assets/icons/${item.id}.svg`)
+		imgEl.setAttribute('alt', `${item.name}`)
 		addToCartBtn.innerText = addToCartBtnText
-		addToCartBtn.addEventListener('click', function(event) {
-			event.preventDefault()
-			if (isItemInCart(element)) {
-				incrementQuantity(element)
+		addToCartBtn.addEventListener('click', function() {
+			if (isItemInCart(item)) {
+				updateQuantity(item)
+				renderShop()
 				return
 			}
-			renderItemInCart(element)
-			addItemToCart(element)
-			log(state.cart)
+			addItemToCart(item)
+			renderShop()
 		})
-		itemList.append(item)
-		itemContainer.append(itemImage)
-		item.append(itemContainer, addToCartBtn)
+		itemList.append(liEl)
+		divEl.append(imgEl)
+		liEl.append(divEl, addToCartBtn)
 	}
 }
 
 function clearStore() {
-	const header = document.querySelector('#store')
-	itemList.remove()
-	itemList = document.createElement('ul')
-	itemList.setAttribute('class', '.item-list store--item-list')
-	header.appendChild(itemList)
+	itemList.innerHTML = ''
+	cart.innerHTML = ''
 }
 
-function renderItemInCart(element) {
-	const liElement = document.createElement('li')
-	cart.append(liElement)
-	const imgElement = document.createElement('img')
-	imgElement.setAttribute('class', 'cart--item-icon')
-	imgElement.setAttribute('src', `assets/icons/${element.id}.svg`)
-	imgElement.setAttribute('alt', `${element.name}`)
-	const pElement = document.createElement('p')
-	pElement.innerText = element.name
+function renderCart() {
+	for (const item of state.cart) {
+		renderItemInCart(item)
+	}
+}
+
+function renderItemInCart(cartItem) {
+	const liEl = document.createElement('li')
+	cart.append(liEl)
+	const imgEl = document.createElement('img')
+	imgEl.setAttribute('class', 'cart--item-icon')
+	imgEl.setAttribute('src', `assets/icons/${cartItem.product.id}.svg`)
+	imgEl.setAttribute('alt', `${cartItem.product.name}`)
+	const pEl = document.createElement('p')
+	pEl.innerText = cartItem.product.name
 	const removeBtn = document.createElement('button')
 	removeBtn.setAttribute('class', 'quantity-btn remove-btn center')
 	removeBtn.innerText = minusSymbol
-	removeBtn.addEventListener('click', function(event) {
-		event.preventDefault()
-		decrementQuantity()
-		quantityDisplay.innerText = quantity
+	removeBtn.addEventListener('click', function() {
+
 	})
 	const quantityDisplay = document.createElement('span')
 	quantityDisplay.setAttribute('class', 'quantity-text center')
-	quantityDisplay.innerText = quantity
+	quantityDisplay.innerText = cartItem.quantity
+
 	const addBtn = document.createElement('button')
 	addBtn.setAttribute('class', 'quantity-btn add-btn center')
 	addBtn.innerText = plusSymbol
-	addBtn.addEventListener('click', function(event) {
-		event.preventDefault()
-		incrementQuantity(element)
-		quantityDisplay.innerText = quantity
+	addBtn.addEventListener('click', function() {
+		if (isItemInCart(cartItem.product)) {
+			incrementQuantity(cartItem)
+			renderShop()
+			return
+		}
+		addItemToCart(cartItem)
+		renderShop()
 	})
-	liElement.append(imgElement, pElement, removeBtn, quantityDisplay, addBtn)
+	liEl.append(imgEl, pEl, removeBtn, quantityDisplay, addBtn)
 }
 
-function addItemToCart(element) {
+function addItemToCart(item) {
 	const cartItem = {
-		item: element,
-		quantity: 1
+		product: item,
+		quantity: 1,
 	}
 	state.cart.push(cartItem)
 }
 
-// function removeItemFromCart(element) {
-// 	start.cart.splice
-// }
-
-function incrementQuantity(item) {
-	const cartItem = isItemInCart(item)
-	log(item)
+function incrementQuantity(cartItem) {
 	cartItem.quantity++
 }
 
-function decrementQuantity() {
-	if (quantity > 0) {
-		quantity--
-	}
+function updateQuantity(item) {
+	const cartItem = isItemInCart(item)
+	cartItem.quantity++
 }
 
 function isItemInCart(item) {
-	return state.cart.find(element => element.item === item)
+	return state.cart.find(element => element.product === item)
 }
 
 renderItemsList()
