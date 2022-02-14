@@ -29,7 +29,7 @@ function renderItemsList() {
 		addToCartBtn.innerText = addToCartBtnText
 		addToCartBtn.addEventListener('click', function() {
 			if (isItemInCart(item)) {
-				updateQuantity(item)
+				updateIncrementQuantity(item)
 				renderShop()
 				return
 			}
@@ -66,7 +66,13 @@ function renderItemInCart(cartItem) {
 	removeBtn.setAttribute('class', 'quantity-btn remove-btn center')
 	removeBtn.innerText = minusSymbol
 	removeBtn.addEventListener('click', function() {
-
+		console.log(cartItem)
+		console.log(state.cart)
+		if (cartItem.quantity === 0) {
+			state.cart.splice(state.cart.indexOf(cartItem), 1)
+		}
+		decrementQuantity(cartItem)
+		renderShop()
 	})
 	const quantityDisplay = document.createElement('span')
 	quantityDisplay.setAttribute('class', 'quantity-text center')
@@ -99,9 +105,18 @@ function incrementQuantity(cartItem) {
 	cartItem.quantity++
 }
 
-function updateQuantity(item) {
+function decrementQuantity(cartItem) {
+	cartItem.quantity--
+}
+
+function updateIncrementQuantity(item) {
 	const cartItem = isItemInCart(item)
 	cartItem.quantity++
+}
+
+function updateDecrementQuantity(item) {
+	const cartItem = isItemInCart(item)
+	cartItem.quantity--
 }
 
 function isItemInCart(item) {
