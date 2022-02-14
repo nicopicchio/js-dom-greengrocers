@@ -1,12 +1,41 @@
 const addToCartBtnText = 'Add to cart'
 const minusSymbol = '-'
 const plusSymbol = '+'
-// let quantity = 1
 
 const itemList = document.querySelector('.store--item-list')
 const cart = document.querySelector('#cart-ul')
 const totalPrice = document.querySelector('.total-number')
 const filter = document.querySelector('#select-products')
+
+const fruit = state.items.filter(item => item.type === 'fruit')
+const veg = state.items.filter(item => item.type === 'veg')
+
+filter.addEventListener('change', function(event) {
+	itemList.innerHTML = ''
+	for (const item of state.items) {
+		if (event.target.value === item.type) {
+			const liEl = document.createElement('li')
+			const divEl = document.createElement('div')
+			const imgEl = document.createElement('img')
+			const addToCartBtn = document.createElement('button')
+			divEl.setAttribute('class', 'store--item-icon')
+			imgEl.setAttribute('src', `assets/icons/${item.id}.svg`)
+			imgEl.setAttribute('alt', `${item.name}`)
+			addToCartBtn.innerText = addToCartBtnText
+			addToCartBtn.addEventListener('click', function() {
+			if (isItemInCart(item)) {
+				alert(`${item.name} already in the cart`)
+				return
+			}
+			addItemToCart(item)
+			renderShop()
+		})
+		itemList.append(liEl)
+		divEl.append(imgEl)
+		liEl.append(divEl, addToCartBtn)
+		}
+	}
+})
 
 function renderShop() {
 	clearStore()
@@ -29,7 +58,6 @@ function renderItemsList() {
 		addToCartBtn.innerText = addToCartBtnText
 		addToCartBtn.addEventListener('click', function() {
 			if (isItemInCart(item)) {
-				console.log(state.cart)
 				alert(`${item.name} already in the cart`)
 				return
 			}
@@ -127,10 +155,3 @@ function priceUpdate() {
 	}
 	return totalPrice.innerText = total.toFixed(2)
 }
-
-const fruits = state.items.filter(item => item.type === 'fruit')
-const veg = state.items.filter(item => item.type === 'veg')
-
-filter.addEventListener('change', function() {
-	
-})
