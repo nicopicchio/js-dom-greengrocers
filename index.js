@@ -1,21 +1,20 @@
 const addToCartBtnText = 'Add to cart'
 const minusSymbol = '-'
 const plusSymbol = '+'
-let quantity = 1
+// let quantity = 1
 
-// A user can view a selection of items in the store 		[X]
-// From the store, a user can add an item to their cart		[X]
-
-let itemList = document.querySelector('.store--item-list')
+const itemList = document.querySelector('.store--item-list')
 const cart = document.querySelector('#cart-ul')
-let totalPrice = document.querySelector('.total-number')
-
+const totalPrice = document.querySelector('.total-number')
 
 function renderShop() {
 	clearStore()
 	renderItemsList()
 	renderCart()
+	priceUpdate()
 }
+
+renderShop()
 
 function renderItemsList() {
 	for (const item of state.items) {
@@ -29,8 +28,8 @@ function renderItemsList() {
 		addToCartBtn.innerText = addToCartBtnText
 		addToCartBtn.addEventListener('click', function() {
 			if (isItemInCart(item)) {
-				updateIncrementQuantity(item)
-				renderShop()
+				console.log(state.cart)
+				alert(`${item.name} already in the cart`)
 				return
 			}
 			addItemToCart(item)
@@ -66,9 +65,7 @@ function renderItemInCart(cartItem) {
 	removeBtn.setAttribute('class', 'quantity-btn remove-btn center')
 	removeBtn.innerText = minusSymbol
 	removeBtn.addEventListener('click', function() {
-		console.log(cartItem)
-		console.log(state.cart)
-		if (cartItem.quantity === 0) {
+		if (cartItem.quantity <= 1) {
 			state.cart.splice(state.cart.indexOf(cartItem), 1)
 		}
 		decrementQuantity(cartItem)
@@ -77,7 +74,6 @@ function renderItemInCart(cartItem) {
 	const quantityDisplay = document.createElement('span')
 	quantityDisplay.setAttribute('class', 'quantity-text center')
 	quantityDisplay.innerText = cartItem.quantity
-
 	const addBtn = document.createElement('button')
 	addBtn.setAttribute('class', 'quantity-btn add-btn center')
 	addBtn.innerText = plusSymbol
@@ -123,4 +119,10 @@ function isItemInCart(item) {
 	return state.cart.find(element => element.product === item)
 }
 
-renderItemsList()
+function priceUpdate() {
+	let total = 0
+	for (const cartItem of state.cart) {
+		total += cartItem.product.price * cartItem.quantity
+	}
+	return totalPrice.innerText = total.toFixed(2)
+}
