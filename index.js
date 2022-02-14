@@ -6,6 +6,7 @@ const plusSymbol = '+'
 const itemList = document.querySelector('.store--item-list')
 const cart = document.querySelector('#cart-ul')
 const totalPrice = document.querySelector('.total-number')
+const filter = document.querySelector('#select-products')
 
 function renderShop() {
 	clearStore()
@@ -126,3 +127,10 @@ function priceUpdate() {
 	}
 	return totalPrice.innerText = total.toFixed(2)
 }
+
+const fruits = state.items.filter(item => item.type === 'fruit')
+const veg = state.items.filter(item => item.type === 'veg')
+
+filter.addEventListener('change', function() {
+	
+})
