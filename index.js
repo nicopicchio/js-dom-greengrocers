@@ -11,43 +11,22 @@ const fruit = state.items.filter(item => item.type === 'fruit')
 const veg = state.items.filter(item => item.type === 'veg')
 
 filter.addEventListener('change', function(event) {
-	itemList.innerHTML = ''
-	for (const item of state.items) {
-		if (event.target.value === item.type) {
-			const liEl = document.createElement('li')
-			const divEl = document.createElement('div')
-			const imgEl = document.createElement('img')
-			const addToCartBtn = document.createElement('button')
-			divEl.setAttribute('class', 'store--item-icon')
-			imgEl.setAttribute('src', `assets/icons/${item.id}.svg`)
-			imgEl.setAttribute('alt', `${item.name}`)
-			addToCartBtn.innerText = addToCartBtnText
-			addToCartBtn.addEventListener('click', function() {
-			if (isItemInCart(item)) {
-				alert(`${item.name} already in the cart`)
-				return
-			}
-			addItemToCart(item)
-			renderShop()
-		})
-		itemList.append(liEl)
-		divEl.append(imgEl)
-		liEl.append(divEl, addToCartBtn)
-		}
-	}
+	if (event.target.value === 'fruit') renderShop(fruit)
+	if (event.target.value === 'veg') renderShop(veg)
+	if (event.target.value === 'show-all') renderShop(state.items)
 })
 
-function renderShop() {
+function renderShop(array) {
 	clearStore()
-	renderItemsList()
+	renderItemsList(array)
 	renderCart()
 	priceUpdate()
 }
 
-renderShop()
+renderShop(state.items)
 
-function renderItemsList() {
-	for (const item of state.items) {
+function renderItemsList(array) {
+	for (const item of array) {
 		const liEl = document.createElement('li')
 		const divEl = document.createElement('div')
 		const imgEl = document.createElement('img')
