@@ -40,7 +40,7 @@ function renderItemsList(array) {
 				return
 			}
 			addItemToCart(item)
-			renderShop()
+			renderShop(state.items)
 		})
 		itemList.append(liEl)
 		divEl.append(imgEl)
@@ -76,7 +76,7 @@ function renderItemInCart(cartItem) {
 			state.cart.splice(state.cart.indexOf(cartItem), 1)
 		}
 		decrementQuantity(cartItem)
-		renderShop()
+		renderShop(state.items)
 	})
 	const quantityDisplay = document.createElement('span')
 	quantityDisplay.setAttribute('class', 'quantity-text center')
@@ -87,11 +87,11 @@ function renderItemInCart(cartItem) {
 	addBtn.addEventListener('click', function() {
 		if (isItemInCart(cartItem.product)) {
 			incrementQuantity(cartItem)
-			renderShop()
+			renderShop(state.items)
 			return
 		}
 		addItemToCart(cartItem)
-		renderShop()
+		renderShop(state.items)
 	})
 	liEl.append(imgEl, pEl, removeBtn, quantityDisplay, addBtn)
 }
