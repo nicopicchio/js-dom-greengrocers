@@ -7,10 +7,9 @@ const cart = document.querySelector('#cart-ul')
 const totalPrice = document.querySelector('.total-number')
 const filter = document.querySelector('#select-products')
 
-const fruit = state.items.filter(item => item.type === 'fruit')
-const veg = state.items.filter(item => item.type === 'veg')
-
 filter.addEventListener('change', function(event) {
+	const fruit = state.items.filter(item => item.type === 'fruit')
+	const veg = state.items.filter(item => item.type === 'veg')
 	if (event.target.value === 'show-all') renderShop(state.items)
 	if (event.target.value === 'fruit') renderShop(fruit)
 	if (event.target.value === 'veg') renderShop(veg)
