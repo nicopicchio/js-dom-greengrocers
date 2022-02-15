@@ -11,9 +11,9 @@ const fruit = state.items.filter(item => item.type === 'fruit')
 const veg = state.items.filter(item => item.type === 'veg')
 
 filter.addEventListener('change', function(event) {
+	if (event.target.value === 'show-all') renderShop(state.items)
 	if (event.target.value === 'fruit') renderShop(fruit)
 	if (event.target.value === 'veg') renderShop(veg)
-	if (event.target.value === 'show-all') renderShop(state.items)
 })
 
 function renderShop(array) {
